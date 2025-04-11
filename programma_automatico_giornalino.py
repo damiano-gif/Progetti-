@@ -6,6 +6,7 @@ import requests
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import shutil
+#aggiunta per prova github
 
 # Configurazione
 HTML_FILE = os.path.join("giornale", "giornale.html")
