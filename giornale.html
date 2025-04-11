@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giornalino Scolastico - Edizione Automatica</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@800&display=swap');
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --accent-light: #ff80b3;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-active: rgba(255, 255, 255, 0.3);
+            --glass-border-active: rgba(255, 255, 255, 0.5);
+            --neon-glow: 0 0 10px rgba(247, 37, 133, 0.8), 
+                         0 0 20px rgba(247, 37, 133, 0.6), 
+                         0 0 30px rgba(247, 37, 133, 0.4);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #0a0a1a;
+            color: var(--light);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(67, 97, 238, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(247, 37, 133, 0.2) 0%, transparent 50%),
+                url('https://cdn.pixabay.com/photo/2013/02/20/10/33/bubbles-83683_1280.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.95) 0%, rgba(63, 55, 201, 0.8) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            height: 95vh;
+            width: 95vw;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                var(--neon-glow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: auto;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            animation: pulseGlow 8s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 10px rgba(247, 37, 133, 0.8), 0 0 20px rgba(247, 37, 133, 0.6), 0 0 30px rgba(247, 37, 133, 0.4); }
+            50% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 15px rgba(247, 37, 133, 0.9), 0 0 30px rgba(247, 37, 133, 0.7), 0 0 45px rgba(247, 37, 133, 0.5); }
+            100% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 10px rgba(247, 37, 133, 0.8), 0 0 20px rgba(247, 37, 133, 0.6), 0 0 30px rgba(247, 37, 133, 0.4); }
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 6s infinite;
+            z-index: -1;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-30%, -30%); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: rotate(30deg) translate(30%, 30%); opacity: 0; }
+        }
+
+        header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .title {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 30px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 15px;
+            box-shadow: 
+                0 4px 15px rgba(67, 97, 238, 0.6),
+                0 0 10px rgba(67, 97, 238, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            animation: titleFloat 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: all 0.7s ease;
+        }
+
+        .school-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                0 0 10px rgba(255, 255, 255, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .header-logo {
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            height: 100px;
+            filter: 
+                drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5))
+                drop-shadow(0 0 10px rgba(247, 37, 133, 0.5));
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: logoPulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoPulse {
+            0% { transform: scale(1); filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px rgba(247, 37, 133, 0.5)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(247, 37, 133, 0.8)); }
+        }
+
+        .news-ticker {
+            overflow: hidden;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 
+                0 4px 15px rgba(67, 97, 238, 0.6),
+                0 0 10px rgba(67, 97, 238, 0.4);
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .news-ticker::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                transparent 20%,
+                transparent 80%,
+                rgba(255, 255, 255, 0.4) 100%
+            );
+            z-index: -1;
+            animation: tickerShine 3s infinite;
+        }
+
+        @keyframes tickerShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .news-ticker span {
+            display: inline-block;
+            padding: 5px 10px;
+            animation: ticker 20s linear infinite;
+            white-space: nowrap;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .news-ticker span::after {
+            content: '⚠️';
+            position: absolute;
+            right: -40px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes ticker {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .news {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding: 0 20px;
+            flex-grow: 1;
+            position: relative;
+            margin-bottom: 0;
+            min-height: 0;
+        }
+
+        .article-box {
+            background: var(--glass);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            width: 30%;
+            min-width: 300px;
+            border-radius: 15px;
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            z-index: 1;
+            animation: articleFloat 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes articleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .article-box:nth-child(1) { animation-delay: 0s; }
+        .article-box:nth-child(2) { animation-delay: 0.2s; }
+        .article-box:nth-child(3) { animation-delay: 0.4s; }
+
+        .article-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(67, 97, 238, 0.3) 0%,
+                rgba(247, 37, 133, 0.2) 100%
+            );
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .article-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            transform: skewX(-20deg) translateX(-150%);
+            transition: all 0.8s ease;
+            z-index: -1;
+        }
+
+        .article-box.active {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: auto;
+            height: auto;
+            z-index: 10;
+            animation: expand 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
+                       activeGlow 3s infinite alternate;
+            margin: 0;
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+                var(--neon-glow);
+            background: var(--glass-active);
+            border-color: var(--glass-border-active);
+        }
+
+        @keyframes activeGlow {
+            0% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 15px rgba(247, 37, 133, 0.8), 0 0 30px rgba(247, 37, 133, 0.6), 0 0 45px rgba(247, 37, 133, 0.4); }
+            100% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 25px rgba(247, 37, 133, 0.9), 0 0 50px rgba(247, 37, 133, 0.7), 0 0 75px rgba(247, 37, 133, 0.5); }
+        }
+
+        .article-box.active::before {
+            background: linear-gradient(
+                135deg,
+                rgba(67, 97, 238, 0.5) 0%,
+                rgba(247, 37, 133, 0.4) 100%
+            );
+        }
+
+        @keyframes expand {
+            0% { 
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .article-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .article-box h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .article-box h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 3px;
+        }
+
+        .article-carousel {
+            flex-grow: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+            min-height: 0;
+            border-radius: 12px;
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.2) 0%,
+                transparent 20%,
+                transparent 80%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
+            z-index: 1;
+        }
+
+        .carousel-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .article-box.active .carousel-slide img {
+            max-height: 450px;
+            box-shadow: 
+                0 12px 35px rgba(0, 0, 0, 0.5),
+                0 0 15px rgba(247, 37, 133, 0.5);
+        }
+
+        .article-box p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            line-height: 1.6;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .carousel-control {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-control.active {
+            background: var(--accent);
+            transform: scale(1.3);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            padding: 15px 25px;
+            display: flex;
+            flex-direction: column;
+            margin-top: 15px;
+            box-shadow: 
+                0 6px 25px rgba(67, 97, 238, 0.6),
+                0 0 15px rgba(67, 97, 238, 0.4);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.15),
+                transparent
+            );
+            animation: footerShine 4s infinite;
+            z-index: -1;
+        }
+
+        @keyframes footerShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Effetti particelle avanzati */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float linear infinite;
+            filter: blur(1px);
+            opacity: 0.7;
+        }
+
+        .particle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, white, transparent 70%);
+        }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) rotate(0deg) scale(1); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { 
+                transform: translateY(-100px) rotate(720deg) scale(1.2); 
+                opacity: 0;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .article-box {
+                min-width: 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .news {
+                flex-wrap: wrap;
+            }
+            
+            .article-box {
+                width: 45%;
+                min-width: 250px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .header-logo {
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: auto;
+                min-height: 95vh;
+                width: 98vw;
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+                padding: 12px 20px;
+            }
+            
+            .school-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .header-logo {
+                height: 70px;
+                right: 15px;
+                top: 15px;
+            }
+            
+            .news-ticker {
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+            
+            .article-box {
+                width: 100%;
+                margin-bottom: 15px;
+                min-width: auto;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.5rem;
+                padding: 10px 15px;
+            }
+            
+            .school-logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .header-logo {
+                height: 50px;
+            }
+            
+            .article-box h2 {
+                font-size: 1.6rem;
+            }
+            
+            .article-box p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="title-container">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpkra2s9LpIbhNCe5wEDtOzXsak0qUTOlL2g&s" alt="Logo Scuola" class="school-logo">
+                <h1 class="title">Giornalino dell'Istituto Einaudi</h1>
+            </div>
+            <img src="./Untitled.png" alt="Logo" class="header-logo">
+        </header>
+        <main>
+            <section class="news">
+                <div class="article-box" id="article1">
+                    <div class="article-content">
+                        <h2>Articolo 1</h2>
+                        <div class="article-carousel">
+                            <div class="carousel-slide">
+                                <img src="https://image.api.playstation.com/vulcan/ap/rnd/202309/2010/041ef90ae0cb8360d661d315b1d4ad40a4f1f6bf08658bb0.jpg?w=440" alt="Basket">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR-Y49LZktnZVql6P-2Wn-KOa6WBEJMTAUsdvansS2YofULuvxYhgebPH5uiMj6k007Bo&usqp=CAU" alt="Basket">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://static.vecteezy.com/ti/foto-gratuito/t2/22336935-pallacanestro-sfondo-illustrazione-ai-generativo-gratuito-foto.jpg" alt="Basket">
+                            </div>
+                        </div>
+                        <p>📢 Il team di basket della scuola ha vinto il torneo regionale!</p>
+                        <div class="carousel-controls">
+                            <div class="carousel-control active"></div>
+                            <div class="carousel-control"></div>
+                            <div class="carousel-control"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-box" id="article2">
+                    <div class="article-content">
+                        <h2>Articolo 2</h2>
+                        <div class="article-carousel">
+                            <div class="carousel-slide">
+                                <img src="https://dsa3.unipg.it/images/imm_pagine/esame-di-stato.jpg" alt="Esami">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://dimages2.corriereobjects.it/files/main_image_mobile/uploads/2023/03/01/6409c03868979.jpeg" alt="Esami">
+                            </div>
+                        </div>
+                        <p>📚 Consigli per prepararsi al meglio agli esami di fine anno.</p>
+                        <div class="carousel-controls">
+                            <div class="carousel-control active"></div>
+                            <div class="carousel-control"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-box" id="article3">
+                    <div class="article-content">
+                        <h2>Articolo 3</h2>
+                        <div class="article-carousel">
+                            <div class="carousel-slide">
+                                <img src="https://www.visitrovereto.it/wp-content/uploads/2023/07/teatro-zandonai-foto-di-luca-matassoni-2023.jpg" alt="Teatro">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt_SPKcrjVVGAQKBHRvsOxOCSnEa_DP2tYwQ&s" alt="Teatro">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://img.freepik.com/vettori-gratuito/composizione-rotonda-del-teatro_1284-24110.jpg" alt="Teatro">
+                            </div>
+                        </div>
+                        <p>🎭 Spettacolo teatrale in arrivo: non perderti "Romeo e Giulietta"!</p>
+                        <div class="carousel-controls">
+                            <div class="carousel-control active"></div>
+                            <div class="carousel-control"></div>
+                            <div class="carousel-control"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="news-ticker">
+                <span>⚠️Ultime notizie⚠️: Domani assemblea degli studenti - Gita scolastica confermata - Nuove attività extracurriculari disponibili!</span>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-content">
+                <p>© 2025 Istituto Einaudi Correggio - Giornalino Scolastico</p>
+                <p>💻 Designed and developed by RazzoliLuca & ContessaDamiano</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Creazione particelle
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Dimensioni casuali
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posizione iniziale casuale
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                // Durata e ritardo animazione casuali
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Colore casuale con tonalità pastello
+                const hue = Math.random() * 60 + 200; // Blu-viola
+                particle.style.background = `hsla(${hue}, 80%, 70%, 0.7)`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Configurazione caroselli automatici
+        function setupCarousels() {
+            const articles = document.querySelectorAll('.article-box');
+            
+            articles.forEach(article => {
+                const carousel = article.querySelector('.article-carousel');
+                const slides = article.querySelectorAll('.carousel-slide');
+                const controls = article.querySelectorAll('.carousel-control');
+                
+                let currentSlide = 0;
+                const slideCount = slides.length;
+                
+                // Nascondi tutti gli slide tranne il primo
+                slides.forEach((slide, index) => {
+                    if (index !== 0) {
+                        slide.style.display = 'none';
+                    }
+                });
+                
+                // Aggiorna controlli
+                function updateControls() {
+                    controls.forEach((control, index) => {
+                        if (index === currentSlide) {
+                            control.classList.add('active');
+                        } else {
+                            control.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // Cambia slide
+                function goToSlide(index) {
+                    slides[currentSlide].style.display = 'none';
+                    currentSlide = (index + slideCount) % slideCount;
+                    slides[currentSlide].style.display = 'flex';
+                    updateControls();
+                }
+                
+                // Auto-play
+                if (slideCount > 1) {
+                    setInterval(() => {
+                        goToSlide(currentSlide + 1);
+                    }, 3000);
+                }
+            });
+        }
+        
+        // Ciclo automatico di espansione articoli
+        function setupArticleCycling() {
+            const articles = document.querySelectorAll('.article-box');
+            const container = document.querySelector('.container');
+            let currentIndex = 0;
+            let isExpanded = false;
+            
+            // Funzione per espandere un articolo
+            function expandArticle(index) {
+                // Chiudi altri articoli espansi
+                articles.forEach(a => a.classList.remove('active'));
+                
+                // Espandi l'articolo corrente
+                articles[index].classList.add('active');
+                isExpanded = true;
+                
+                // Dopo 5 secondi, chiudi l'articolo
+                setTimeout(() => {
+                    articles[index].classList.remove('active');
+                    isExpanded = false;
+                    
+                    // Dopo una pausa, passa al prossimo articolo
+                    setTimeout(() => {
+                        currentIndex = (currentIndex + 1) % articles.length;
+                        expandArticle(currentIndex);
+                    }, 2000);
+                }, 5000);
+            }
+            
+            // Avvia il ciclo dopo un ritardo iniziale
+            setTimeout(() => {
+                expandArticle(currentIndex);
+            }, 12000);
+            
+            // Ciclo continuo
+            setInterval(() => {
+                if (!isExpanded) {
+                    currentIndex = (currentIndex + 1) % articles.length;
+                    expandArticle(currentIndex);
+                }
+            }, 15000);
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupCarousels();
+            setupArticleCycling();
+        });
+    </script>
+</body>
+
+</html>
+                   
